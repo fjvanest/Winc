@@ -1,0 +1,28 @@
+def greet(name, greet= 'Hello, <name>!'):
+    greetreturn = greet.replace("<name>", name)
+    return greetreturn
+
+def force(mass, body = 'earth'):
+    mass = float(mass)
+
+    planets = { 'sun': 274,
+    'jupiter' : 24.9,
+    'neptune' : 11.2,
+    'saturn' : 10.4,
+    'earth' : 9.8,
+    'uranus' : 8.9,
+    'venus' : 8.9,
+    'mars' : 3.7,
+    'mercury' : 3.7,
+    'moon' : 1.6,
+    'pluto' : 0.6 }
+
+    if body in planets:
+        force = float(mass * planets[body])
+    return force
+
+def pull(m1, m2, d):
+    G = 6.674e-11
+    pull = G * ((m1 * m2)/d**2)
+    return pull
+
