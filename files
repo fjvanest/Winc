@@ -1,0 +1,85 @@
+__winc_id__ = "ae539110d03e49ea8738fd413ac44ba8"
+__human_name__ = "files"
+
+from asyncore import read
+from operator import contains
+#from asyncio import read
+import os, zipfile
+
+# clean_cache: takes no arguments and creates an empty folder named cache in the current directory. 
+# If it already exists, it deletes everything in the cache folder.
+# C:\Winc\files
+
+def clean_cache():
+    directory = "cache"
+    parent_dir = "C:/Winc/files"
+    path = os.path.join(parent_dir, directory)
+    
+    if not os.path.exists(path):
+        os.mkdir(path)
+        print("Directory '% s' created" % directory)
+    else:
+        for f in os.listdir(path):
+           os.remove(os.path.join(path, f))
+        print("Directory '% s' cleared" % directory) 
+    
+    return
+
+# cache_zip: takes a zip file path (str) and a cache dir path (str) as arguments, in that order. 
+# The function then unpacks the indicated zip file into a clean cache folder.
+# You can test this with data.zip file.
+
+def cache_zip(zip_path, cache_path):
+    clean_cache()
+
+    with zipfile.ZipFile(zip_path, mode= "r") as unpack:
+         unpack.extractall(cache_path)
+
+    return
+
+# cached_files: takes no arguments and returns a list of all the files in the cache. 
+# The file paths should be specified in absolute terms. 
+# Search the web for what this means! No folders should be included in the list. 
+# You do not have to account for files within folders within the cache directory.
+
+def cached_files():
+    files_list = []
+    cache_path = os.path.abspath("C:\Winc\\files\cache")
+    #print("cache_path")
+    files_in_folder = os.listdir(cache_path)
+    #print(files_in_folder)
+
+    for x in files_in_folder:
+        file_path = os.path.join(cache_path , x)
+        files_list.append(file_path)
+ 
+    return files_list
+
+
+# find_password: takes the list of file paths from cached_files as an argument. 
+# This function should read the text in each one to see if the password is in there. 
+# Surely there should be a word in there to indicate the presence of the password? 
+# Once found, find_password should return this password string.
+
+def find_password(files_list):
+    password = 'Has not been found'
+
+    for file_name in os.listdir("C:\Winc\\files\cache\\"):
+    #     if file_name.endswith(".txt"):
+
+        file_open = "C:\Winc\\files\cache\\{}".format(file_name)
+        with open(file_open) as f:
+            pw_list = [line.rstrip('\n') for line in f]
+        
+        for i in range(len(pw_list)):
+            if 'password' in pw_list[i]:
+                password = pw_list[i]
+                
+
+    password = password.split(': ')[1]
+    print(password)
+    return password
+
+
+find_password(cached_files())
+
